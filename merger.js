@@ -3,6 +3,23 @@
 const fs = require('fs').promises;
 const path = require('path');
 
+
+/**
+ * Shuffles an array in place using the Fisher-Yates algorithm.
+ * @param {Array<any>} array The array to shuffle.
+ */
+function shuffleArray(array) {
+  // Loop backward from the last element
+  for (let i = array.length - 1; i > 0; i--) {
+    // Pick a random index from 0 to i (inclusive)
+    const j = Math.floor(Math.random() * (i + 1));
+
+    // Swap the elements at indexes i and j
+    // This is a concise way to swap using "destructuring assignment"
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
 /**
  * This script scans all immediate subdirectories of its current location.
  * It reads all .json files within those subdirectories, assumes each contains an array,
@@ -63,7 +80,9 @@ async function mergeJsonFromSubfolders() {
       } catch (readDirErr) {
          console.error(`Error: Could not scan subfolder ${folder}. ${readDirErr.message}`);
       }
-    }
+    }    
+
+    shuffleArray(allObjects)
 
     // 9. Write the final combined 'total.json' file
     const outputPath = path.join(currentDir, 'GPTeacher.json');
